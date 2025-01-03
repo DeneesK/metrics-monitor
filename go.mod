@@ -2,7 +2,10 @@ module github.com/DeneesK/metrics-monitor
 
 go 1.23.0
 
-require github.com/ilyakaznacheev/cleanenv v1.5.0
+require (
+	github.com/go-chi/chi/v5 v5.2.0
+	github.com/ilyakaznacheev/cleanenv v1.5.0
+)
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
