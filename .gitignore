@@ -24,3 +24,6 @@ vendor/
 
 # DB files
 *.db
+
+# ENV files
+.env
