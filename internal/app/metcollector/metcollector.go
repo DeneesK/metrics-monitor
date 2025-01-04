@@ -35,7 +35,7 @@ func collectMetrics(ctx context.Context, scrapeInterval time.Duration, log *slog
 	prometheus.MustRegister(cpuUsage, memoryUsage, networkSent, networkReceived)
 
 	for {
-		cpuPercent, err := cpu.Percent(time.Second, false)
+		cpuPercent, err := cpu.Percent(2*time.Second, false)
 		if err != nil {
 			log.Error("failed to collect cpuPercent", logger.Err(err))
 		} else {
