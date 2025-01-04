@@ -21,6 +21,8 @@ services:
     restart: always
     networks:
       - monitor_network
+    ports:
+      - "3000:3000"
 volumes:
   grafana-data:
   grafana-config:
