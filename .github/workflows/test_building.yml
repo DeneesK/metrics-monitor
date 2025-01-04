@@ -1,0 +1,25 @@
+name: Test Build App
+
+on:
+    pull_request:
+    push:
+        branches:
+        - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+        DEPLOY_DIRECTORY: /root/apps/monitor
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.22
+      - name: Build app
+        run: |
+          go mod download
+          go build -o monitor ./cmd/main.go
+          echo "Build successful"
