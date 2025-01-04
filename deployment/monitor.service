@@ -1,5 +1,5 @@
 [Unit]
-Description=gRPC Auth
+Description=Monitor Service
 After=network.target
 
 [Service]
