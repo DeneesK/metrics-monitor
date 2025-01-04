@@ -6,7 +6,7 @@ on:
         branches:
         - main
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     env:
         DEPLOY_DIRECTORY: /root/apps/monitor
@@ -22,3 +22,4 @@ jobs:
         run: |
           go mod download
           go build -o monitor ./cmd/main.go
+          echo "Build successful"
