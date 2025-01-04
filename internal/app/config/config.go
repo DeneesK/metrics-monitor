@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	Address                 string        `env-default:"localhost:8000"`
+	Address                 string        `env-default:"0.0.0.0:8000"`
 	Timeout                 time.Duration `env-default:"4s"`
 	LogEnv                  string        `env-default:"local"`
 	ScrapingInterval        time.Duration `env-default:"4s"`
