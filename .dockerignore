@@ -2,3 +2,4 @@
 docker_compose.yml
 LICENSE
 .gitignore
+images/
