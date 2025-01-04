@@ -27,3 +27,7 @@ vendor/
 
 # ENV files
 .env
+
+#MacOs
+.DS_Store
+ 
