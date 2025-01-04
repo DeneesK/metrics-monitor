@@ -8,9 +8,11 @@ import (
 )
 
 type Config struct {
-	Address string        `env-default:"localhost:8000"`
-	Timeout time.Duration `env-default:"4s"`
-	LogEnv  string        `env-default:"local"`
+	Address                 string        `env-default:"localhost:8000"`
+	Timeout                 time.Duration `env-default:"4s"`
+	LogEnv                  string        `env-default:"local"`
+	ScrapingInterval        time.Duration `env-default:"4s"`
+	GracefulShutdownTimeout time.Duration `env-default:"4s"`
 }
 
 func MustLoad() *Config {

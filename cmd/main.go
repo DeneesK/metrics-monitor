@@ -1,10 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/DeneesK/metrics-monitor/internal/app/config"
+	"github.com/DeneesK/metrics-monitor/internal/app/metcollector"
 	"github.com/DeneesK/metrics-monitor/internal/app/router"
 	"github.com/DeneesK/metrics-monitor/internal/app/server"
 	"github.com/DeneesK/metrics-monitor/internal/pkg/logger"
@@ -21,9 +25,27 @@ func main() {
 
 	log.Info(fmt.Sprintf("starting server, listen %s", conf.Address))
 
-	if err := srv.ListenAndServe(); err != nil {
-		log.Error("failed to start server", logger.Err(err))
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	metcollector.StartMetricCollector(ctx, conf.ScrapingInterval, log)
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Error("failed to start server", logger.Err(err))
+			os.Exit(1)
+		}
+	}()
+
+	<-ctx.Done()
+	log.Info("shutdown initiated...")
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), conf.GracefulShutdownTimeout)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Error("Error during shutdown:", logger.Err(err))
 		os.Exit(1)
 	}
 
+	log.Info("server gracefully stopped")
 }
