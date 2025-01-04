@@ -47,6 +47,6 @@ func main() {
 		log.Error("Error during shutdown:", logger.Err(err))
 		os.Exit(1)
 	}
-
+	<-shutdownCtx.Done()
 	log.Info("server gracefully stopped")
 }

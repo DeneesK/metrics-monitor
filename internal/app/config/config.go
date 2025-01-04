@@ -12,7 +12,7 @@ type Config struct {
 	Timeout                 time.Duration `env-default:"4s"`
 	LogEnv                  string        `env-default:"local"`
 	ScrapingInterval        time.Duration `env-default:"4s"`
-	GracefulShutdownTimeout time.Duration `env-default:"4s"`
+	GracefulShutdownTimeout time.Duration `env-default:"5s"`
 }
 
 func MustLoad() *Config {
