@@ -46,5 +46,6 @@ jobs:
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER }} "mv /tmp/monitor.service /etc/systemd/system/monitor.service"
       - name: Start application
         run: |
+          ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER }} "pwd && ls -la"
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER }} "make start_monitor"
           ssh -i deploy_key.pem -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_SERVER }} "systemctl daemon-reload && systemctl restart monitor.service"
