@@ -2,7 +2,7 @@ name: Deploy App
 
 on:
     workflow_run:
-        workflows: ["go vet test", "Test Build App"]
+        workflows: ["Test Build App"]
         types:
         - completed
         branches:
