@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -31,7 +32,7 @@ func main() {
 	metcollector.StartMetricCollector(ctx, conf.ScrapingInterval, log)
 
 	go func() {
-		if err := srv.ListenAndServe(); err != nil {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Error("failed to start server", logger.Err(err))
 			os.Exit(1)
 		}
