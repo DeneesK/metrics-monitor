@@ -8,6 +8,7 @@ import (
 	"github.com/DeneesK/metrics-monitor/internal/pkg/logger"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 )
@@ -30,12 +31,16 @@ func collectMetrics(ctx context.Context, scrapeInterval time.Duration, log *slog
 			Name: "server_network_bytes_received",
 			Help: "Принятые байты через сеть",
 		})
+		diskSpace = prometheus.NewGauge(prometheus.GaugeOpts{
+			Name: "server_disk_usage_percentage",
+			Help: "Текущая загрузка диска в процентах",
+		})
 	)
 
-	prometheus.MustRegister(cpuUsage, memoryUsage, networkSent, networkReceived)
+	prometheus.MustRegister(cpuUsage, memoryUsage, networkSent, networkReceived, diskSpace)
 
 	for {
-		cpuPercent, err := cpu.Percent(2*time.Second, false)
+		cpuPercent, err := cpu.Percent(time.Second, false)
 		if err != nil {
 			log.Error("failed to collect cpuPercent", logger.Err(err))
 		} else {
@@ -49,6 +54,13 @@ func collectMetrics(ctx context.Context, scrapeInterval time.Duration, log *slog
 			log.Error("failed to collect vMem", logger.Err(err))
 		} else {
 			memoryUsage.Set(vMem.UsedPercent)
+		}
+
+		dSpace, err := disk.Usage("/")
+		if err != nil {
+			log.Error("failed to collect diskSpace", logger.Err(err))
+		} else {
+			diskSpace.Set(dSpace.UsedPercent)
 		}
 
 		netStats, err := net.IOCounters(false)
