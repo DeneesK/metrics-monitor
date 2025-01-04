@@ -7,16 +7,25 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
-    ports:
-      - "9090:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - monitor_network
   grafana:
     image: grafana/grafana:8.5.22
+    ports:
+      - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-config:/etc/grafana
     depends_on:
       - prometheus
     restart: always
+    networks:
+      - monitor_network
 volumes:
   grafana-data:
   grafana-config:
+networks:
+  monitor_network:
+    driver: bridge
