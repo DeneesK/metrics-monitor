@@ -45,7 +45,7 @@ func collectMetrics(ctx context.Context, scrapeInterval time.Duration, log *slog
 			log.Error("failed to collect cpuPercent", logger.Err(err))
 		} else {
 			if len(cpuPercent) > 0 {
-				cpuUsage.Set(cpuPercent[0] + 1.3)
+				cpuUsage.Set(cpuPercent[0])
 			}
 		}
 
